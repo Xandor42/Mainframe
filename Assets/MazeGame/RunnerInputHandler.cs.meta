@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 76f35981c02e16748a4cefc55bf49968
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - replacementObject: {fileID: 100000, guid: c50b86c253dd3c64f8053ede21d46a0c, type: 2}
+  - element1: {instanceID: 0}
+  - element2: {instanceID: 0}
+  - element3: {instanceID: 0}
+  - element4: {instanceID: 0}
+  - element5: {instanceID: 0}
+  - emptyHackingBar: {fileID: 2800000, guid: 49a7f95caaa502841b5924e99ed87e34, type: 3}
+  - fullHackingBar: {fileID: 2800000, guid: a37ba1afcac6f9749bcde3771e2940ae, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
