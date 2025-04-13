@@ -38,7 +38,7 @@ public class MakeMeAMaze : MonoBehaviour {
 			floor.transform.position = new Vector3 (mazeHeight/2, -1, mazeWidth/2);
 			floor.transform.localScale = new Vector3(mazeWidth, 1, mazeHeight);
 
-			BoxCollider floorCollider = floor.collider as BoxCollider;
+			BoxCollider floorCollider = floor.GetComponent<Collider>() as BoxCollider;
 
 			if (floorCollider != null)
 				floorCollider.size = new Vector3(1,1,1);
@@ -61,7 +61,7 @@ public class MakeMeAMaze : MonoBehaviour {
 					int wallChooser = _random.Next(100)+1;
 					GameObject wall = null;
 
-					if(wallChooser < 33 && i!=0 && i!=mazeHeight-1 && j!=0 && j!= mazeWidth-1)//percentage of nodes:normal walls
+					if(wallChooser < 25 && i!=0 && i!=mazeHeight-1 && j!=0 && j!= mazeWidth-1)//percentage of nodes:normal walls
 						wall = Instantiate(nodeObject) as GameObject;
 					else
 						wall = Instantiate(wallObject) as GameObject;
@@ -130,7 +130,7 @@ public class MakeMeAMaze : MonoBehaviour {
 		maze[row, col] = 0;
 
 		//set starting cell to be spawn for the runner
-		_runnerSpawn= new Vector3(col, 10, row);
+		_runnerSpawn= new Vector3(col, 0, row);
 
 		//make the maze with Depth first search
 		MazeCarver(maze, row, col);

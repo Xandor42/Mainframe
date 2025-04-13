@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class RunnerInputHandler : MonoBehaviour 
 {
 	public GameObject replacementObject;
-	public GUIText element1;
-	public GUIText element2;
-	public GUIText element3;
-	public GUIText element4;
-	public GUIText element5;
+	public TMP_Text remaining_objectives_label;
+	public TMP_Text hack_traced_label;
+	public TMP_Text game_over_label;
+	public TMP_Text hacking_message_label;
+	public TMP_Text complete_label;
 	public float traceTime;
 	public Texture2D emptyHackingBar;
 	public Texture2D fullHackingBar;
@@ -16,12 +17,6 @@ public class RunnerInputHandler : MonoBehaviour
 	public AudioClip sound2;
 	public AudioClip sound3;
 	
-
-	private GUIText remainingObjectives;
-	private GUIText remainingTime;
-	private GUIText systemWins;
-	private GUIText hackingMsg;
-	private GUIText completeMsg;
 	private bool haxxor = false;
 	private bool timerActive;
 	private float hackProgress = 0.0F;
@@ -30,7 +25,7 @@ public class RunnerInputHandler : MonoBehaviour
 
 	private GameObject nodeBeingHaxxed;
 
-	static System.Random _random = new System.Random();//for random key click sound selection
+	static System.Random _random = new System.Random(); //for random key click sound selection
 
 
 
@@ -49,19 +44,15 @@ public class RunnerInputHandler : MonoBehaviour
 
 	void Start()
 	{
-		Screen.showCursor = false;
+		Cursor.visible = false;
 		nodes = GameObject.FindGameObjectsWithTag("Objective");
-		remainingObjectives = Instantiate(element1) as GUIText;
-		remainingObjectives.text = "Remaining Firewalls: " + nodes.Length;
+		remaining_objectives_label.text = "Remaining Firewalls: " + nodes.Length;
 
-		remainingTime = Instantiate (element2) as GUIText;
-		remainingTime.text = "Hack Traced in " + traceTime + " Seconds";
+		hack_traced_label.text = "Hack Traced in " + traceTime.ToString() + " Seconds";
 
-		hackingMsg = Instantiate(element4) as GUIText;
-		hackingMsg.text = "";
+		hacking_message_label.text = "";
 
-		completeMsg = Instantiate (element5) as GUIText;
-		completeMsg.text = "";
+		complete_label.text = "";
 
 	}
 
@@ -71,31 +62,28 @@ public class RunnerInputHandler : MonoBehaviour
 		{
 			displayTime -= Time.deltaTime;
 			if (displayTime <= 0)
-				completeMsg.text="";
+				complete_label.text="";
 		}
 		Vector3 fwd = this.gameObject.transform.TransformDirection(Vector3.forward);
 		RaycastHit strike;
 		nodes = GameObject.FindGameObjectsWithTag("Objective");
 		if (nodes.Length == 0) 
 		{
-			remainingObjectives.text = "All firewalls down, escape to the exit!";
+			remaining_objectives_label.text = "All firewalls down, escape to the exit!";
 		}
 		else
-			remainingObjectives.text = "Remaining Firewalls: " + nodes.Length;
+			remaining_objectives_label.text = "Remaining Firewalls: " + nodes.Length;
 
 		traceTime -= Time.deltaTime;
-		remainingTime.text = "Hack Traced in " + traceTime + " Seconds";
+		hack_traced_label.text = "Hack Traced in " + traceTime.ToString() + " Seconds";
 
 		if (traceTime < 0) 
 		{
-			systemWins = Instantiate (element3) as GUIText;
-			systemWins.text = "GAME OVER: SYSTEM WINS";
+			game_over_label.text = "GAME OVER: SYSTEM WINS";
 			Time.timeScale = 0;
-			Screen.showCursor = true;
+			Cursor.visible = true;
 			if(Input.GetButtonDown("Click") || Input.GetButtonDown("UseNode"))
 				Application.LoadLevel("MainMenu");
-
-
 		}
 
 
@@ -103,8 +91,8 @@ public class RunnerInputHandler : MonoBehaviour
 		{
 			this.gameObject.GetComponent<FPSInputController>().enabled = false;
 			this.gameObject.GetComponent<CharacterMotor>().enabled = false;
-			this.gameObject.rigidbody.velocity=Vector3.zero;
-			this.gameObject.rigidbody.angularVelocity=Vector3.zero;
+			this.gameObject.GetComponent<Rigidbody>().linearVelocity=Vector3.zero;
+			this.gameObject.GetComponent<Rigidbody>().angularVelocity=Vector3.zero;
 			if (Input.anyKeyDown){
 				hackProgress += 0.05F;
 				randomSound = _random.Next(100)+1;
@@ -120,7 +108,7 @@ public class RunnerInputHandler : MonoBehaviour
 			{
 				hackProgress = 0.0F;
 				haxxor = false;
-				hackingMsg.text = "";
+				hacking_message_label.text = "";
 
 
 
@@ -139,7 +127,7 @@ public class RunnerInputHandler : MonoBehaviour
 				}
 				timerActive= true;
 				displayTime = 1.5F;
-				completeMsg.text = "Firewall Hacked!";
+				complete_label.text = "Firewall Hacked!";
 
 				this.gameObject.GetComponent<CharacterMotor>().enabled = true;
 				this.gameObject.GetComponent<FPSInputController>().enabled = true;
@@ -152,15 +140,13 @@ public class RunnerInputHandler : MonoBehaviour
 
 		if (Input.GetButtonDown ("UseNode")) 
 		{
-			Debug.Log("used a thing!");
 			if(Physics.Raycast(transform.position, fwd, out strike, 0.75F))
 			{
-				Debug.Log("Hit a thing!");
 				if(strike.collider.tag == "Objective")
 				{
 					haxxor = true;
 					nodeBeingHaxxed = strike.collider.gameObject;
-					hackingMsg.text = "Hack in Progress:";
+					hacking_message_label.text = "Hack in Progress:";
 
 				}
 
